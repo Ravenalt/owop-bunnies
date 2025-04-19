@@ -10,7 +10,7 @@
             btn.style.top = Math.random() * (window.innerHeight - 64) + "px";
             btn.style.width = "64px";
             btn.style.height = "64px";
-            btn.style.backgroundImage = "url('https://i.imgur.com/JwM8qye.png')";
+            btn.style.backgroundImage = "url('https://imgur.com/bH2vwiv')";
             btn.style.backgroundSize = "contain";
             btn.style.backgroundRepeat = "no-repeat";
             btn.style.zIndex = "9999";
