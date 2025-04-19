@@ -1,7 +1,7 @@
 (function () {
     if (OWOP.bunnyAnimator) return;
 
-    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/refs/heads/main/bunny-sheet.png'; // must be full image, 576x288
+    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/main/rabbit_3.png'; // must be full image, 576x288
     const FRAME_WIDTH = 96;
     const FRAME_HEIGHT = 36;
     const FRAMES_PER_ROW = 6;
