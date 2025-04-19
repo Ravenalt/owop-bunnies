@@ -19,6 +19,7 @@
     bunny.style.zIndex = '9999';
     bunny.style.imageRendering = 'pixelated';
     bunny.style.transform = 'translate(-50%, -50%)';
+    bunny.style.filter = 'brightness(0) saturate(100%) invert(86%) sepia(13%) saturate(438%) hue-rotate(299deg) brightness(105%) contrast(104%)';
 
     document.body.appendChild(bunny);
 
