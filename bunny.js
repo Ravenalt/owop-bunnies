@@ -4,6 +4,7 @@
     const SPRITE_URL = 'https://opengameart.org/sites/default/files/rabbit_3.png';
     const FRAME_WIDTH = 32;
     const FRAME_HEIGHT = 32;
+    const FRAMES_PER_ROW = 4;
     const TOTAL_FRAMES = 4;
     const SPRITE_DURATION = 100;
 
@@ -15,9 +16,10 @@
     bunny.style.height = FRAME_HEIGHT + 'px';
     bunny.style.backgroundImage = `url(${SPRITE_URL})`;
     bunny.style.backgroundRepeat = 'no-repeat';
-    bunny.style.backgroundSize = `${FRAME_WIDTH * TOTAL_FRAMES}px ${FRAME_HEIGHT}px`;
+    bunny.style.backgroundSize = `${FRAME_WIDTH * FRAMES_PER_ROW}px ${FRAME_HEIGHT}px`;
     bunny.style.zIndex = '9999';
     bunny.style.imageRendering = 'pixelated';
+    bunny.style.transform = 'translate(-50%, -50%)';
 
     document.body.appendChild(bunny);
 
@@ -29,8 +31,12 @@
         dx: 0,
         dy: 0,
         animateFrame() {
+            const col = this.frame % FRAMES_PER_ROW;
+            const row = 0; // Only use top row for now
+            const xPos = -col * FRAME_WIDTH;
+            const yPos = -row * FRAME_HEIGHT;
+            this.el.style.backgroundPosition = `${xPos}px ${yPos}px`;
             this.frame = (this.frame + 1) % TOTAL_FRAMES;
-            this.el.style.backgroundPosition = `-${this.frame * FRAME_WIDTH}px 0px`;
         },
         hopLoop() {
             this.dx = (Math.random() - 0.5) * 20;
