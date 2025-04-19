@@ -1,54 +1,59 @@
 (function () {
-    if (OWOP.bunnyButtons) return;
+    if (OWOP.bunnyAnimator) return;
 
-    OWOP.bunnyButtons = {
-        buttons: [],
-        createButton() {
-            const btn = document.createElement("div");
-            btn.style.position = "absolute";
-            btn.style.left = Math.random() * (window.innerWidth - 64) + "px";
-            btn.style.top = Math.random() * (window.innerHeight - 64) + "px";
-            btn.style.width = "64px";
-            btn.style.height = "64px";
-            btn.style.backgroundImage = "url('https://imgur.com/bH2vwiv')";
-            btn.style.backgroundSize = "contain";
-            btn.style.backgroundRepeat = "no-repeat";
-            btn.style.zIndex = "9999";
-            btn.style.cursor = "pointer";
+    const SPRITE_URL = 'https://opengameart.org/sites/default/files/rabbit_3.png';
+    const FRAME_WIDTH = 32;
+    const FRAME_HEIGHT = 32;
+    const TOTAL_FRAMES = 4;
+    const SPRITE_DURATION = 100;
 
-            btn._hopping = false;
+    const bunny = document.createElement('div');
+    bunny.style.position = 'absolute';
+    bunny.style.left = '50%';
+    bunny.style.top = '50%';
+    bunny.style.width = FRAME_WIDTH + 'px';
+    bunny.style.height = FRAME_HEIGHT + 'px';
+    bunny.style.backgroundImage = `url(${SPRITE_URL})`;
+    bunny.style.backgroundRepeat = 'no-repeat';
+    bunny.style.backgroundSize = `${FRAME_WIDTH * TOTAL_FRAMES}px ${FRAME_HEIGHT}px`;
+    bunny.style.zIndex = '9999';
+    bunny.style.imageRendering = 'pixelated';
 
-            btn.addEventListener("mouseenter", () => {
-                if (!btn._hopping) {
-                    btn._hopping = true;
-                    this.hopLoop(btn);
+    document.body.appendChild(bunny);
+
+    OWOP.bunnyAnimator = {
+        el: bunny,
+        frame: 0,
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        dx: 0,
+        dy: 0,
+        animateFrame() {
+            this.frame = (this.frame + 1) % TOTAL_FRAMES;
+            this.el.style.backgroundPosition = `-${this.frame * FRAME_WIDTH}px 0px`;
+        },
+        hopLoop() {
+            this.dx = (Math.random() - 0.5) * 20;
+            this.dy = (Math.random() - 0.5) * 20;
+
+            let hopSteps = 10;
+            const step = () => {
+                if (hopSteps-- <= 0) {
+                    setTimeout(() => this.hopLoop(), 1000 + Math.random() * 1000);
+                    return;
                 }
-            });
-
-            document.body.appendChild(btn);
-            this.buttons.push(btn);
-        },
-        hopLoop(btn) {
-            if (!btn._hopping) return;
-            const x = parseFloat(btn.style.left);
-            const y = parseFloat(btn.style.top);
-            const dx = (Math.random() - 0.5) * 100;
-            const dy = (Math.random() - 0.5) * 100;
-            const newX = Math.max(0, Math.min(window.innerWidth - 64, x + dx));
-            const newY = Math.max(0, Math.min(window.innerHeight - 64, y + dy));
-
-            btn.style.transition = "all 0.2s ease";
-            btn.style.left = newX + "px";
-            btn.style.top = newY + "px";
-
-            setTimeout(() => this.hopLoop(btn), 800);
-        },
-        spawn(count = 2) {
-            for (let i = 0; i < count; i++) {
-                this.createButton();
-            }
+                this.x += this.dx;
+                this.y += this.dy;
+                this.x = Math.max(0, Math.min(window.innerWidth - FRAME_WIDTH, this.x));
+                this.y = Math.max(0, Math.min(window.innerHeight - FRAME_HEIGHT, this.y));
+                this.el.style.left = this.x + 'px';
+                this.el.style.top = this.y + 'px';
+                this.animateFrame();
+                setTimeout(step, SPRITE_DURATION);
+            };
+            step();
         }
     };
 
-    OWOP.bunnyButtons.spawn(2);
+    OWOP.bunnyAnimator.hopLoop();
 })();
