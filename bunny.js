@@ -46,11 +46,16 @@
     bunny.style.zIndex = '9999';
     bunny.style.imageRendering = 'pixelated';
     bunny.style.transform = 'translate(-50%, -50%)';
+    bunny.style.cursor = 'pointer';
 
     document.body.appendChild(bunny);
 
     loadAndCleanSprite(SPRITE_URL, (cleanedURL) => {
         bunny.style.backgroundImage = `url(${cleanedURL})`;
+    });
+
+    bunny.addEventListener('click', () => {
+        OWOP.rainbowToolShake();
     });
 
     OWOP.bunnyFlipHop = {
@@ -68,30 +73,6 @@
         },
         updateFlip() {
             this.el.style.scale = this.facingLeft ? '-1 1' : '1 1';
-        },
-        dropEgg() {
-            const egg = document.createElement('div');
-            egg.textContent = '🥚';
-            egg.style.position = 'absolute';
-            egg.style.left = (this.x + Math.random() * 20 - 10) + 'px';
-            egg.style.top = (this.y + Math.random() * 20 - 10) + 'px';
-            egg.style.fontSize = '24px';
-            egg.style.cursor = 'pointer';
-            egg.style.userSelect = 'none';
-            egg.style.zIndex = '9999';
-            egg.style.transition = 'transform 0.1s ease';
-            document.body.appendChild(egg);
-
-            egg.addEventListener('click', () => {
-                egg.remove();
-                OWOP.rainbowToolShake();
-            });
-
-            setTimeout(() => {
-                egg.style.opacity = '0.2';
-                egg.style.transform = 'scale(0.8)';
-            }, 6000);
-            setTimeout(() => egg.remove(), 8000);
         },
         hopLoop() {
             this.dx = (Math.random() - 0.5) * 50;
@@ -114,8 +95,6 @@
                 this.y = Math.max(0, Math.min(window.innerHeight - FRAME_HEIGHT, this.y));
                 this.el.style.left = this.x + 'px';
                 this.el.style.top = this.y + 'px';
-
-                if (Math.random() < 0.1) this.dropEgg();
 
                 this.animateFrame();
                 setTimeout(step, SPRITE_DURATION);
