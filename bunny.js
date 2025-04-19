@@ -1,11 +1,11 @@
 (function () {
     if (OWOP.bunnyAnimator) return;
 
-    const SPRITE_URL = 'https://opengameart.org/sites/default/files/rabbit_3.png';
-    const FRAME_WIDTH = 32;
-    const FRAME_HEIGHT = 32;
-    const FRAMES_PER_ROW = 4;
-    const TOTAL_FRAMES = 4;
+    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/refs/heads/main/bunny-sheet.png'; // update to your uploaded bunny image URL
+    const FRAME_WIDTH = 96;
+    const FRAME_HEIGHT = 36;
+    const FRAMES_PER_ROW = 6;
+    const TOTAL_FRAMES = 6; // using only top row for now
     const SPRITE_DURATION = 100;
 
     const bunny = document.createElement('div');
@@ -16,7 +16,7 @@
     bunny.style.height = FRAME_HEIGHT + 'px';
     bunny.style.backgroundImage = `url(${SPRITE_URL})`;
     bunny.style.backgroundRepeat = 'no-repeat';
-    bunny.style.backgroundSize = `${FRAME_WIDTH * FRAMES_PER_ROW}px ${FRAME_HEIGHT}px`;
+    bunny.style.backgroundSize = `${FRAME_WIDTH * FRAMES_PER_ROW}px ${FRAME_HEIGHT * 8}px`;
     bunny.style.zIndex = '9999';
     bunny.style.imageRendering = 'pixelated';
     bunny.style.transform = 'translate(-50%, -50%)';
@@ -32,17 +32,17 @@
         dy: 0,
         animateFrame() {
             const col = this.frame % FRAMES_PER_ROW;
-            const row = 0; // Only use top row for now
+            const row = 0; // top row only
             const xPos = -col * FRAME_WIDTH;
             const yPos = -row * FRAME_HEIGHT;
             this.el.style.backgroundPosition = `${xPos}px ${yPos}px`;
             this.frame = (this.frame + 1) % TOTAL_FRAMES;
         },
         hopLoop() {
-            this.dx = (Math.random() - 0.5) * 20;
-            this.dy = (Math.random() - 0.5) * 20;
+            this.dx = (Math.random() - 0.5) * 30;
+            this.dy = (Math.random() - 0.5) * 30;
 
-            let hopSteps = 10;
+            let hopSteps = 8;
             const step = () => {
                 if (hopSteps-- <= 0) {
                     setTimeout(() => this.hopLoop(), 1000 + Math.random() * 1000);
