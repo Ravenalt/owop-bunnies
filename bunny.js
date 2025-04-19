@@ -1,11 +1,11 @@
 (function () {
     if (OWOP.bunnyAnimator) return;
 
-    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/refs/heads/main/bunny-sheet.png'; // update to your uploaded bunny image URL
+    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/refs/heads/main/bunny-sheet.png'; // must be full image, 576x288
     const FRAME_WIDTH = 96;
     const FRAME_HEIGHT = 36;
     const FRAMES_PER_ROW = 6;
-    const TOTAL_FRAMES = 6; // using only top row for now
+    const TOTAL_FRAMES = 6;
     const SPRITE_DURATION = 100;
 
     const bunny = document.createElement('div');
@@ -16,7 +16,7 @@
     bunny.style.height = FRAME_HEIGHT + 'px';
     bunny.style.backgroundImage = `url(${SPRITE_URL})`;
     bunny.style.backgroundRepeat = 'no-repeat';
-    bunny.style.backgroundSize = `${FRAME_WIDTH * FRAMES_PER_ROW}px ${FRAME_HEIGHT * 8}px`;
+    bunny.style.backgroundSize = `576px 288px`; // hardcoded to actual image size
     bunny.style.zIndex = '9999';
     bunny.style.imageRendering = 'pixelated';
     bunny.style.transform = 'translate(-50%, -50%)';
@@ -32,7 +32,7 @@
         dy: 0,
         animateFrame() {
             const col = this.frame % FRAMES_PER_ROW;
-            const row = 0; // top row only
+            const row = 0; // use first row for now
             const xPos = -col * FRAME_WIDTH;
             const yPos = -row * FRAME_HEIGHT;
             this.el.style.backgroundPosition = `${xPos}px ${yPos}px`;
