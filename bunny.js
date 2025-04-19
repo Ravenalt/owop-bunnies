@@ -24,7 +24,6 @@
                 const r = data[i];
                 const g = data[i + 1];
                 const b = data[i + 2];
-
                 if (r === 255 && g === 151 && b === 191) {
                     data[i + 3] = 0;
                 }
@@ -70,6 +69,30 @@
         updateFlip() {
             this.el.style.scale = this.facingLeft ? '-1 1' : '1 1';
         },
+        dropEgg() {
+            const egg = document.createElement('div');
+            egg.textContent = '🥚';
+            egg.style.position = 'absolute';
+            egg.style.left = (this.x + Math.random() * 20 - 10) + 'px';
+            egg.style.top = (this.y + Math.random() * 20 - 10) + 'px';
+            egg.style.fontSize = '24px';
+            egg.style.cursor = 'pointer';
+            egg.style.userSelect = 'none';
+            egg.style.zIndex = '9999';
+            egg.style.transition = 'transform 0.1s ease';
+            document.body.appendChild(egg);
+
+            egg.addEventListener('click', () => {
+                egg.remove();
+                OWOP.rainbowToolShake();
+            });
+
+            setTimeout(() => {
+                egg.style.opacity = '0.2';
+                egg.style.transform = 'scale(0.8)';
+            }, 6000);
+            setTimeout(() => egg.remove(), 8000);
+        },
         hopLoop() {
             this.dx = (Math.random() - 0.5) * 50;
             this.dy = (Math.random() - 0.5) * 30;
@@ -92,6 +115,8 @@
                 this.el.style.left = this.x + 'px';
                 this.el.style.top = this.y + 'px';
 
+                if (Math.random() < 0.1) this.dropEgg();
+
                 this.animateFrame();
                 setTimeout(step, SPRITE_DURATION);
             };
@@ -100,4 +125,40 @@
     };
 
     OWOP.bunnyFlipHop.hopLoop();
+
+    OWOP.rainbowToolShake = function () {
+        const tools = document.getElementById('toole-container')?.children;
+        if (!tools || !tools.length) return;
+
+        let running = true;
+        const duration = 2000;
+        const interval = 60;
+        const originalStyles = [];
+
+        for (let i = 0; i < tools.length; i++) {
+            originalStyles[i] = tools[i].style.transform;
+        }
+
+        const cycle = () => {
+            if (!running) return;
+            for (let i = 0; i < tools.length; i++) {
+                const hue = (Math.random() * 360) | 0;
+                const x = (Math.random() - 0.5) * 8;
+                const y = (Math.random() - 0.5) * 8;
+                tools[i].style.transform = `translate(${x}px, ${y}px)`;
+                tools[i].style.backgroundColor = `hsl(${hue}, 90%, 70%)`;
+            }
+            setTimeout(cycle, interval);
+        };
+
+        cycle();
+
+        setTimeout(() => {
+            running = false;
+            for (let i = 0; i < tools.length; i++) {
+                tools[i].style.transform = originalStyles[i] || '';
+                tools[i].style.backgroundColor = '';
+            }
+        }, duration);
+    };
 })();
