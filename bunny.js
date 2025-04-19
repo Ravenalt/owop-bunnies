@@ -1,12 +1,11 @@
 (function () {
-    if (OWOP.bunnyAnimator) return;
+    if (OWOP.bunnyFlipHop) return;
 
-    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/main/rabbit_3.png'; // must be full image, 576x288
-    const FRAME_WIDTH = 96;
-    const FRAME_HEIGHT = 36;
-    const FRAMES_PER_ROW = 6;
-    const TOTAL_FRAMES = 6;
-    const SPRITE_DURATION = 100;
+    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/main/cat4.png'; // Replace with your upload
+    const FRAME_WIDTH = 48;
+    const FRAME_HEIGHT = 48;
+    const TOTAL_FRAMES = 2;
+    const SPRITE_DURATION = 200;
 
     const bunny = document.createElement('div');
     bunny.style.position = 'absolute';
@@ -16,44 +15,52 @@
     bunny.style.height = FRAME_HEIGHT + 'px';
     bunny.style.backgroundImage = `url(${SPRITE_URL})`;
     bunny.style.backgroundRepeat = 'no-repeat';
-    bunny.style.backgroundSize = `576px 288px`; // hardcoded to actual image size
+    bunny.style.backgroundSize = `${FRAME_WIDTH * TOTAL_FRAMES}px ${FRAME_HEIGHT}px`;
     bunny.style.zIndex = '9999';
     bunny.style.imageRendering = 'pixelated';
     bunny.style.transform = 'translate(-50%, -50%)';
 
     document.body.appendChild(bunny);
 
-    OWOP.bunnyAnimator = {
+    OWOP.bunnyFlipHop = {
         el: bunny,
         frame: 0,
         x: window.innerWidth / 2,
         y: window.innerHeight / 2,
         dx: 0,
         dy: 0,
+        facingLeft: true,
         animateFrame() {
-            const col = this.frame % FRAMES_PER_ROW;
-            const row = 0; // use first row for now
-            const xPos = -col * FRAME_WIDTH;
-            const yPos = -row * FRAME_HEIGHT;
-            this.el.style.backgroundPosition = `${xPos}px ${yPos}px`;
+            const xPos = -this.frame * FRAME_WIDTH;
+            this.el.style.backgroundPosition = `${xPos}px 0px`;
             this.frame = (this.frame + 1) % TOTAL_FRAMES;
         },
+        updateFlip() {
+            this.el.style.scale = this.facingLeft ? '1 1' : '-1 1';
+        },
         hopLoop() {
-            this.dx = (Math.random() - 0.5) * 30;
+            this.dx = (Math.random() - 0.5) * 50;
             this.dy = (Math.random() - 0.5) * 30;
+            this.facingLeft = this.dx < 0;
+            this.updateFlip();
 
-            let hopSteps = 8;
+            let hopSteps = 6;
             const step = () => {
                 if (hopSteps-- <= 0) {
-                    setTimeout(() => this.hopLoop(), 1000 + Math.random() * 1000);
+                    // Switch to idle frame
+                    this.frame = 0;
+                    this.animateFrame();
+                    setTimeout(() => this.hopLoop(), 1500 + Math.random() * 500);
                     return;
                 }
-                this.x += this.dx;
-                this.y += this.dy;
+
+                this.x += this.dx / 6;
+                this.y += this.dy / 6;
                 this.x = Math.max(0, Math.min(window.innerWidth - FRAME_WIDTH, this.x));
                 this.y = Math.max(0, Math.min(window.innerHeight - FRAME_HEIGHT, this.y));
                 this.el.style.left = this.x + 'px';
                 this.el.style.top = this.y + 'px';
+
                 this.animateFrame();
                 setTimeout(step, SPRITE_DURATION);
             };
@@ -61,5 +68,5 @@
         }
     };
 
-    OWOP.bunnyAnimator.hopLoop();
+    OWOP.bunnyFlipHop.hopLoop();
 })();
