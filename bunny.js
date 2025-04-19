@@ -1,7 +1,7 @@
 (function () {
     if (OWOP.bunnyFlipHop) return;
 
-    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/main/cat4.png';
+    const SPRITE_URL = 'https://raw.githubusercontent.com/Ravenalt/owop-bunnies/main/flippy-bunny.png';
     const FRAME_WIDTH = 48;
     const FRAME_HEIGHT = 48;
     const TOTAL_FRAMES = 2;
